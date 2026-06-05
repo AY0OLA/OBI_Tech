@@ -1,6 +1,6 @@
 "use client";
 
-import {assets} from "@/public/assests/assets"
+import { assets } from "@/public/assests/assets";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
@@ -10,11 +10,11 @@ import HamX from "./HamX";
 import { useRouter } from "next/navigation";
 
 export const Navbar = () => {
-    const [isOpen, setIsOpen] = useState(false);
-    const [userOpen, setUserOpen] = useState(false);
-    // const { session, setSession } = useAppContext();
+  const [isOpen, setIsOpen] = useState(false);
+  const [userOpen, setUserOpen] = useState(false);
+  // const { session, setSession } = useAppContext();
 
-    const router = useRouter();
+  const router = useRouter();
 
   //   const checkIn = () => {
   //     setUserOpen((prev) => !prev);
@@ -26,7 +26,7 @@ export const Navbar = () => {
   //     router.push("/");
   //   };
   return (
-    <nav className="flex items-center justify-between px-6 md:px-16 lg:px-32 py-3   text-white bg-black ">
+    <nav className="flex items-center justify-between px-6 md:px-16 lg:px-32 py-3 text-white bg-black ">
       <Link href="/">
         <h1 className="text-[#fce3c7]">OBI-Tech</h1>
       </Link>
