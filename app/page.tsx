@@ -1,3 +1,4 @@
+import Footer from "@/component/Footer";
 import HeaderSlider from "@/component/HeaderSlider";
 import HomeProducts from "@/component/HomeProducts";
 import { Navbar } from "@/component/Navbar";
@@ -13,7 +14,8 @@ export default async function Page() {
       <div>
         <HeaderSlider />
 
-        <HomeProducts products={allProducts}/>
+        <HomeProducts products={allProducts} />
+        <Footer />
       </div>
     </div>
   );
