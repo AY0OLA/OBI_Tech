@@ -1,74 +1,96 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
 import { createClient } from "../supabase/server";
 import { emailValidationSchema } from "../zodvalidations/form-validations";
 
-export async function login(formData: FormData) {
-  const supabase = await createClient();
-  // check email
-  const email = formData.get("email") as string;
+export async function signUp(formData: FormData) {
+  const cookieStore = await cookies();
+  const supabase = createClient(cookieStore);
 
-  const emailValidation = emailValidationSchema.safeParse({ email: email });
+  const email = formData.get("email") as string;
+  const password = formData.get("password") as string;
+
+  const emailValidation = emailValidationSchema.safeParse({ email });
+
   if (!emailValidation.success) {
-    console.log("Invalid email format");
-    return;
+    return {
+      error: "Please enter a valid email address.",
+    };
   }
 
-  const { error } = await supabase.auth.signInWithOtp({
-    email: email,
-    options: {
-      shouldCreateUser: true,
-    },
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
   });
 
   if (error) {
-    console.log("Got errort signing in--->", error);
-    revalidatePath("/");
-    return { error: error.message };
+    return {
+      error: error.message,
+    };
   }
 
   revalidatePath("/");
+
+  return {
+    error: null,
+    user: data.user,
+    message: "Check your email to verify your account.",
+  };
 }
 
-export async function verifyToken(formData: FormData) {
-  const supabase = await createClient();
-  // check email
-  const email = formData.get("email") as string;
-  const token = formData.get("token") as string;
+export async function login(formData: FormData) {
+  const cookieStore = await cookies();
+  const supabase = createClient(cookieStore);
 
-  const emailValidation = emailValidationSchema.safeParse({ email: email });
+  const email = formData.get("email") as string;
+  const password = formData.get("password") as string;
+
+  const emailValidation = emailValidationSchema.safeParse({ email });
+
   if (!emailValidation.success) {
-    console.log("Invalid email format");
-    return;
+    return {
+      error: "Please enter a valid email address.",
+      session: null,
+    };
   }
 
-  const {
-    data: { session },
-    error,
-  } = await supabase.auth.verifyOtp({
-    email: email,
-    token: token.trim(),
-    type: "email",
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
   });
 
   if (error) {
-    console.log("Got errort verifying OTP--->", error);
-    return { error: error.message, session: null };
+    return {
+      error: error.message,
+      session: null,
+    };
   }
-  console.log("User session:", session);
+
   revalidatePath("/");
-  return { error: null, session };
+
+  return {
+    error: null,
+    session: data.session,
+  };
 }
 
 export async function signOut() {
-  const supabase = await createClient();
+  const cookieStore = await cookies();
+  const supabase = createClient(cookieStore);
+
   const { error } = await supabase.auth.signOut();
 
   if (error) {
-    console.log("Error signing out:", error);
-    return { error: error.message };
+    return {
+      error: error.message,
+    };
   }
 
   revalidatePath("/");
+
+  return {
+    error: null,
+  };
 }

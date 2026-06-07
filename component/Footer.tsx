@@ -6,7 +6,7 @@ const Footer = () => {
       <div className="flex flex-col md:flex-row items-start justify-center px-6 md:px-16 lg:px-32 gap-10 py-14 border-b border-gray-500/30 bg-black text-white">
         <div className="w-4/5">
           <Link href={"/"}>
-            <h1 className="text-2xl font-bold text-[#fce3c7]">Eldics Store</h1>
+            <h1 className="text-2xl font-bold text-[#fce3c7]">OBI-TECH Store</h1>
           </Link>
           <p className="mt-6 text-sm">
             We are dedicated to providing the best service possible. Our team is

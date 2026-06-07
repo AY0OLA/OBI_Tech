@@ -1,6 +1,6 @@
 "use client";
 import { useAppContext } from "@/context/AppContext";
-import { login, verifyToken } from "@/utils/action/userAuth.action";
+import { login } from "@/utils/action/userAuth.action";
 import { emailValidationSchema } from "@/utils/zodvalidations/form-validations";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -10,9 +10,10 @@ import toast from "react-hot-toast";
 
 const LoginUser = () => {
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [tokenPart, setTokenPart] = useState(false);
-  const [token, setToken] = useState("");
+  // const [tokenPart, setTokenPart] = useState(false);
+  // const [token, setToken] = useState("");
   const { setSession } = useAppContext();
   const router = useRouter();
 
@@ -26,20 +27,41 @@ const LoginUser = () => {
         toast.error("Please enter a valid email address");
         return;
       }
+      const strongPassword =
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
-      toast.success("Please check email for OTP");
+      if (!strongPassword.test(password)) {
+        toast.error(
+          "Password must contain uppercase, lowercase, number, special character and be at least 8 characters.",
+        );
+        return;
+      }
+      const toastId = toast.loading("Signing in...");
+
+      try {
+        toast.success("Logged in successfully!", {
+          id: toastId,
+        });
+      } catch (error) {
+        toast.error("Something went wrong", {
+          id: toastId,
+        });
+      }
       const formData = new FormData();
       formData.append("email", email);
+      formData.append("password", password);
 
       const loginUser = await login(formData);
 
       if (loginUser?.error) {
-        toast.error("something went wrong with signing in");
+        toast.error(loginUser.error);
         return;
       }
-      setTokenPart(true);
-      toast.success("Check your email for the login link!");
-      //direct the user to authenticate with the otp
+      if (loginUser?.session) {
+        setSession(loginUser.session);
+        toast.success("Logged in successfully!");
+        router.push("/");
+      }
     } catch (error) {
       console.error("Something went wrong. Please try again later.", error);
     } finally {
@@ -47,70 +69,38 @@ const LoginUser = () => {
     }
   };
 
-  const handleSubmitToken = async () => {
-    try {
-      setLoading(true);
-      const formData = new FormData();
-      formData.append("email", email);
-      formData.append("token", token);
-      const otpVerification = await verifyToken(formData);
+  // const handleSubmitToken = async () => {
+  //   try {
+  //     setLoading(true);
+  //     const formData = new FormData();
+  //     formData.append("email", email);
+  //     formData.append("token", token);
+  //     const otpVerification = await verifyToken(formData);
 
-      if (otpVerification?.error) {
-        toast.error("Invalid token. Please try again.");
-        return;
-      }
-      if (otpVerification?.session) {
-        toast.success("You are now logged in!");
-        setSession(otpVerification.session);
-        router.push("/");
-      }
+  //     if (otpVerification?.error) {
+  //       toast.error("Invalid token. Please try again.");
+  //       return;
+  //     }
+  //     if (otpVerification?.session) {
+  //       toast.success("You are now logged in!");
+  //       setSession(otpVerification.session);
+  //       router.push("/");
+  //     }
 
-      // You can redirect the user to the dashboard or home page after successful login
-    } catch (error) {
-      console.error("Error submitting token:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  //     // You can redirect the user to the dashboard or home page after successful login
+  //   } catch (error) {
+  //     console.error("Error submitting token:", error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
-  return tokenPart ? (
-    <div className="bg-black ">
-      <section className="flex flex-col justify-center items-center h-screen gap-4  text-white pt-10 w-[80%] mx-auto ">
-        <div className="self-center">
-          <h1 className="text-4xl font-bold mb-4 max-md:text-xl">
-            Token From Your Email
-          </h1>
-          <p className="text-lg md:text-2xl max-md:text-sm  text-center text-slate-500">
-            Check the junk/spam mailbox too.
-          </p>
-        </div>
-
-        <div className="  px-4 sm:px-0">
-          <input
-            aria-label="Token"
-            placeholder="Enter Token"
-            className="w-full px-4 py-3 bg-white  rounded-lg transition-all duration-200 placeholder-gray-400  text-black  shadow-sm"
-            name="token"
-            type="text"
-            onChange={(e) => setToken(e.target.value)}
-          />
-
-          <button
-            onClick={handleSubmitToken}
-            className="px-3 py-2 mt-4 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300  bg-[#043033] rounded-lg  focus:outline-none "
-            type="button"
-          >
-            {loading ? "submitting" : "Submit"}
-          </button>
-        </div>
-      </section>
-    </div>
-  ) : (
+  return (
     <div className="bg-black">
       <section className="flex flex-col justify-center h-screen items-center gap-6 text-white w-full px-4">
         {/* Logo */}
         <Link href={"/"}>
-          <h1 className="text-4xl font-bold text-center">Eldics Store</h1>
+          <h1 className="text-4xl font-bold text-center">OBI-TECH Store</h1>
         </Link>
 
         {/* Heading */}
@@ -121,17 +111,36 @@ const LoginUser = () => {
         {/* Input + Button */}
         <div className="w-full max-w-[600px] flex flex-col gap-4">
           <input
+            value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Your Email"
             name="email"
             type="email"
-            id="Email"
+            id="email"
             className="w-full px-4 py-3 bg-white rounded-lg transition-all duration-200 placeholder-gray-400 text-black shadow-sm"
           />
+          <input
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            id="password"
+            name="password"
+            type="password"
+            required
+            minLength={8}
+            placeholder="Password"
+            className="w-full px-4 py-3 bg-white rounded-lg placeholder-gray-400 text-black shadow-sm"
+          />{" "}
+          <p className="text-sm text-slate-400">
+            {" "}
+            Password must contain: <br /> • At least 8 characters <br /> • One
+            uppercase letter <br /> • One lowercase letter <br /> • One number{" "}
+            <br /> • One special character{" "}
+          </p>
         </div>
         <button
           onClick={handleLogin}
-          className="px-3 py-2 mt-4 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300  bg-[#043033] rounded-lg  focus:outline-none "
+          disabled={loading}
+          className="px-3 py-2 mt-4 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300  bg-[#043033] rounded-lg  focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {loading ? "Signing In..." : "Sign In"}
         </button>

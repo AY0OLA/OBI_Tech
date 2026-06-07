@@ -18,7 +18,8 @@ export async function fetchProducts(): Promise<ProductParams[]> {
 }
 
 export async function fetchProductById(id: string) {
-  const supabase = await createClient();
+ const cookieStore = await cookies();
+ const supabase = createClient(cookieStore);
   try {
     const { data: product, error } = await supabase
       .from("products")
