@@ -95,60 +95,98 @@ const LoginUser = () => {
   //   }
   // };
 
-  return (
-    <div className="bg-black">
-      <section className="flex flex-col justify-center h-screen items-center gap-6 text-white w-full px-4">
-        {/* Logo */}
-        <Link href={"/"}>
-          <h1 className="text-4xl font-bold text-center">OBI-TECH Store</h1>
-        </Link>
+ return (
+   <div className="min-h-screen bg-gradient-to-br from-slate-950 via-black to-slate-900 flex items-center justify-center px-4 py-8">
+     <div className="w-full max-w-md bg-white rounded-2xl shadow-2xl p-6 sm:p-8">
+       {/* Logo */}
+       <Link href="/" className="block">
+         <h1 className="text-3xl font-bold text-center text-[#043033]">
+           OBI-TECH Store
+         </h1>
+       </Link>
 
-        {/* Heading */}
-        <h1 className="text-2xl md:text-2xl max-md:text-xl font-bold text-center">
-          Please Provide Your Email
-        </h1>
+       {/* Heading */}
+       <div className="mt-6 text-center">
+         <h2 className="text-2xl font-bold text-gray-900">Welcome Back</h2>
+         <p className="mt-2 text-sm text-gray-500">
+           Sign in to access your account
+         </p>
+       </div>
 
-        {/* Input + Button */}
-        <div className="w-full max-w-[600px] flex flex-col gap-4">
-          <input
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Your Email"
-            name="email"
-            type="email"
-            id="email"
-            className="w-full px-4 py-3 bg-white rounded-lg transition-all duration-200 placeholder-gray-400 text-black shadow-sm"
-          />
-          <input
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            id="password"
-            name="password"
-            type="password"
-            required
-            minLength={8}
-            placeholder="Password"
-            className="w-full px-4 py-3 bg-white rounded-lg placeholder-gray-400 text-black shadow-sm"
-          />{" "}
-          <p className="text-sm text-slate-400">
-            {" "}
-            Password must contain: <br /> • At least 8 characters <br /> • One
-            uppercase letter <br /> • One lowercase letter <br /> • One number{" "}
-            <br /> • One special character{" "}
-          </p>
-        </div>
-        <button
-          onClick={handleLogin}
-          disabled={loading}
-          className="px-3 py-2 mt-4 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300  bg-[#043033] rounded-lg  focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          {loading ? "Signing In..." : "Sign In"}
-        </button>
-        <div className="flex flex-row justify-center align-center text-white">
-          <p className="">We sign you up if you don&apos;t have an account? </p>
-        </div>
-      </section>
-    </div>
-  );
+       {/* Form */}
+       <div className="mt-8 space-y-4">
+         <div>
+           <label
+             htmlFor="email"
+             className="block mb-2 text-sm font-medium text-gray-700"
+           >
+             Email Address
+           </label>
+           <input
+             value={email}
+             onChange={(e) => setEmail(e.target.value)}
+             placeholder="Enter your email"
+             name="email"
+             type="email"
+             id="email"
+             className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#043033] focus:border-transparent outline-none transition"
+           />
+         </div>
+
+         <div>
+           <label
+             htmlFor="password"
+             className="block mb-2 text-sm font-medium text-gray-700"
+           >
+             Password
+           </label>
+           <input
+             value={password}
+             onChange={(e) => setPassword(e.target.value)}
+             id="password"
+             name="password"
+             type="password"
+             required
+             minLength={8}
+             placeholder="Enter your password"
+             className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#043033] focus:border-transparent outline-none transition"
+           />
+         </div>
+
+         <div className="bg-slate-50 border border-slate-200 rounded-xl p-4">
+           <p className="text-xs text-slate-600 leading-6">
+             Password must contain:
+             <br />• At least 8 characters
+             <br />• One uppercase letter
+             <br />• One lowercase letter
+             <br />• One number
+             <br />• One special character
+           </p>
+         </div>
+
+         <button
+           onClick={handleLogin}
+           disabled={loading}
+           className="w-full py-3 bg-[#043033] hover:bg-[#021d1f] text-white font-semibold rounded-xl transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+         >
+           {loading ? "Signing In..." : "Sign In"}
+         </button>
+       </div>
+
+       {/* Footer */}
+       <div className="mt-6 text-center">
+         <p className="text-sm text-gray-600">
+           Don't have an account?{" "}
+           <Link
+             href="/register"
+             className="font-semibold text-[#043033] hover:underline"
+           >
+             Create one
+           </Link>
+         </p>
+       </div>
+     </div>
+   </div>
+ );
 };
 export default LoginUser;

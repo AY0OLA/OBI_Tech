@@ -1,9 +1,9 @@
 import { type NextRequest } from "next/server";
 import { createClient } from "@/utils/supabase/middleware";
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   // update user's auth session
-  console.log("Middleware executed");
+  console.log("proxy executed");
   return await createClient(request);
 }
 
