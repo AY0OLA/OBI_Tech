@@ -10,10 +10,12 @@ import toast from "react-hot-toast";
 const SignupUser = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const handleSignup = async () => {
+    console.log("Signup button clicked");
     try {
       setLoading(true);
 
@@ -25,7 +27,10 @@ const SignupUser = () => {
         toast.error("Please enter a valid email");
         return;
       }
-
+      if (password !== confirmPassword) {
+        toast.error("Passwords do not match");
+        return;
+      }
       const strongPassword =
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
@@ -150,6 +155,8 @@ const SignupUser = () => {
               Confirm Password
             </label>
             <input
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
               type="password"
               id="confirmPassword"
               placeholder="Confirm your password"

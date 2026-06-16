@@ -3,7 +3,7 @@ import { createClient } from "@/utils/supabase/middleware";
 
 export async function proxy(request: NextRequest) {
   // update user's auth session
-  console.log("proxy executed");
+  // console.log("proxy executed");
   return await createClient(request);
 }
 

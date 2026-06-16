@@ -6,8 +6,8 @@ import { fetchProducts } from "@/utils/action/product.action";
 import React from "react";
 
 const allProducts = await fetchProducts();
-// console.log(allProducts);
 export default async function Page() {
+  
   return (
     <div>
       <Navbar />

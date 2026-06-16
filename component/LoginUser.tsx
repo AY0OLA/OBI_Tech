@@ -12,8 +12,6 @@ const LoginUser = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  // const [tokenPart, setTokenPart] = useState(false);
-  // const [token, setToken] = useState("");
   const { setSession } = useAppContext();
   const router = useRouter();
 
@@ -43,7 +41,7 @@ const LoginUser = () => {
           id: toastId,
         });
       } catch (error) {
-        toast.error("Something went wrong", {
+        toast.error("Check your username or password", {
           id: toastId,
         });
       }
@@ -68,32 +66,6 @@ const LoginUser = () => {
       setLoading(false);
     }
   };
-
-  // const handleSubmitToken = async () => {
-  //   try {
-  //     setLoading(true);
-  //     const formData = new FormData();
-  //     formData.append("email", email);
-  //     formData.append("token", token);
-  //     const otpVerification = await verifyToken(formData);
-
-  //     if (otpVerification?.error) {
-  //       toast.error("Invalid token. Please try again.");
-  //       return;
-  //     }
-  //     if (otpVerification?.session) {
-  //       toast.success("You are now logged in!");
-  //       setSession(otpVerification.session);
-  //       router.push("/");
-  //     }
-
-  //     // You can redirect the user to the dashboard or home page after successful login
-  //   } catch (error) {
-  //     console.error("Error submitting token:", error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
 
  return (
    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-black to-slate-900 flex items-center justify-center px-4 py-8">

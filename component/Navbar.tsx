@@ -5,26 +5,26 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
 import HamX from "./HamX";
-// import { useAppContext } from "@/context/AppContext";
-// import { signOut } from "@/utils/actions/userAuth.action";
+import { useAppContext } from "@/context/AppContext";
+import { signOut } from "@/utils/action/userAuth.action";
 import { useRouter } from "next/navigation";
 
 export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [userOpen, setUserOpen] = useState(false);
-  // const { session, setSession } = useAppContext();
+  const { session, setSession } = useAppContext();
 
   const router = useRouter();
 
-  //   const checkIn = () => {
-  //     setUserOpen((prev) => !prev);
-  //   };
+    const checkIn = () => {
+      setUserOpen((prev) => !prev);
+    };
 
-  //   const handleSignOut = async () => {
-  //     await signOut();
-  //     setSession(null);
-  //     router.push("/");
-  //   };
+    const handleSignOut = async () => {
+      await signOut();
+      setSession(null);
+      router.push("/");
+    };
   return (
     <nav className="flex items-center justify-between px-6 md:px-16 lg:px-32 py-3 text-white bg-black ">
       <Link href="/">
@@ -63,7 +63,7 @@ export const Navbar = () => {
           </Link>
 
           <button
-            // onClick={checkIn}
+            onClick={checkIn}
             className="flex items-center gap-2 hover:text-gray-400 transition"
           >
             <Image src={assets.user_icon} alt="user" />
@@ -79,7 +79,7 @@ export const Navbar = () => {
             <Image src={assets.cart_icon} alt="cart" className="w-6 h-6" />
           </button>
           <button
-            // onClick={checkIn}
+            onClick={checkIn}
             className="flex items-center gap-2 hover:text-gray-400 transition"
           >
             <Image src={assets.user_icon} alt="user" className="w-6 h-6" />
@@ -87,46 +87,70 @@ export const Navbar = () => {
 
           <HamX isOpen={isOpen} setIsOpen={setIsOpen} />
         </div>
-        {/* {userOpen && (
-          <div className=" absolute w-[350px] h-[200px] flex flex-col flex-full bg-black text-white top-[92px] right-0 z-10 rounded-b-2xl max-md:top-[48px] md:top-[48px]">
-            <div className="flex flex-row justify-center items-center">
-              {session ? (
-                <p className="text-[#fce3c7] mr-2">{session?.user.email}</p>
-              ) : (
-                <div>
+        {userOpen && (
+          <div className="absolute right-0 top-14 z-50 w-72 overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-xl">
+            {session ? (
+              <>
+                {/* User Info */}
+                <div className="border-b border-gray-100 px-5 py-4">
+                  <p className="text-xs font-medium uppercase tracking-wide text-gray-400">
+                    Signed in as
+                  </p>
+                  <p className="mt-1 truncate text-sm font-medium text-gray-900">
+                    {session.user.email}
+                  </p>
+                </div>
+
+                {/* Menu Items */}
+                <div className="p-2">
                   <Link
-                    href="/login"
-                    className="hover:text-gray-400 transition"
+                    href="/profile"
+                    className="flex items-center rounded-xl px-4 py-3 text-sm text-gray-700 hover:bg-gray-100 transition"
                   >
-                    Sign In
+                    My Profile
+                  </Link>
+
+                  <Link
+                    href="/orders"
+                    className="flex items-center rounded-xl px-4 py-3 text-sm text-gray-700 hover:bg-gray-100 transition"
+                  >
+                    My Orders
+                  </Link>
+
+                  <Link
+                    href="/reviews"
+                    className="flex items-center rounded-xl px-4 py-3 text-sm text-gray-700 hover:bg-gray-100 transition"
+                  >
+                    My Reviews
                   </Link>
                 </div>
-              )}
-            </div>
 
-            {session && (
-              <div className="flex flex-col items-center gap-2  mt-2">
-                <Link
-                  href="/profile"
-                  className="hover:text-gray-400 transition"
-                >
-                  My Profile
-                </Link>
-                <Link href="/orders" className="hover:text-gray-400 transition">
-                  My Orders
-                </Link>
-                <Link
-                  href="/reviews"
-                  className="hover:text-gray-400 transition"
-                >
-                  My Reviews
-                </Link>
+                {/* Sign Out */}
+                <div className="border-t border-gray-100 p-2">
+                  <button
+                    onClick={handleSignOut}
+                    className="w-full rounded-xl px-4 py-3 text-left text-sm font-medium text-red-600 hover:bg-red-50 transition"
+                  >
+                    Sign Out
+                  </button>
+                </div>
+              </>
+            ) : (
+              <div className="p-5">
+                <p className="mb-4 text-sm text-gray-500">
+                  Sign in to view your account and orders.
+                </p>
 
-                <button onClick={handleSignOut}>Sign Out</button>
+                <Link
+                  href="/login"
+                  className="block w-full rounded-xl bg-[#043033] py-3 text-center text-sm font-medium text-white hover:bg-[#022224] transition"
+                >
+                  Sign In
+                </Link>
               </div>
             )}
           </div>
-        )} */}
+        )}
       </div>
 
       {isOpen && (
