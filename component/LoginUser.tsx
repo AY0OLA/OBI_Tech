@@ -150,7 +150,7 @@ const LoginUser = () => {
          <p className="text-sm text-gray-600">
            Don't have an account?{" "}
            <Link
-             href="/register"
+             href="/signup"
              className="font-semibold text-[#043033] hover:underline"
            >
              Create one

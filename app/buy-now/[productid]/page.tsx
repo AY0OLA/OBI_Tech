@@ -5,11 +5,12 @@ import { fetchProductById } from "@/utils/action/product.action";
 export default async function BuyNow({
   params,
 }: {
-  params: Promise<{ productId: string }>;
+  params: Promise<{ productid: string }>;
 }) {
-  const { productId } = await params;
+  const { productid } = await params;
 
-  const product = await fetchProductById(productId);
+  const product = await fetchProductById(productid);
   const addresses = await fetchAddresses();
+
   return <BuyNowPage product={product} addresses={addresses} />;
 }

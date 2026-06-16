@@ -14,149 +14,236 @@ const ProductDetails = ({ product }: { product: ProductParams }) => {
     addItem(product);
     toast.success("Check Cart");
   };
-  return (
-    <>
-      <Navbar />
-      <div className="max-md:p-0 px-6 md:px-16 lg:px-32 pt-14 space-y-10 max-md:mt-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
-          <div className="px-5 lg:px-16 xl:px-20">
-            <div className="rounded-lg overflow-hidden bg-gray-500/10 mb-4">
+
+  
+return (
+  <>
+    <Navbar />
+
+    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16">
+        {/* Product Images */}
+        <div>
+          <div className="aspect-square overflow-hidden rounded-2xl border border-slate-200 bg-slate-100">
+            <Image
+              src={product.image_url_array[0]}
+              alt={product.name}
+              width={1000}
+              height={1000}
+              className="w-full h-full object-cover hover:scale-105 transition duration-500"
+            />
+          </div>
+        </div>
+
+        {/* Product Details */}
+        <div className="rounded-2xl border border-slate-200 bg-white p-6 md:p-8 shadow-sm">
+          <h1 className="text-2xl md:text-4xl font-bold text-slate-900">
+            {product.name}
+          </h1>
+
+          {/* Rating */}
+          <div className="flex items-center gap-3 mt-4">
+            <div className="flex items-center gap-1">
               <Image
-                src={product.image_url_array[0]}
-                alt="alt"
-                className="w-full h-auto object-cover mix-blend-multiply"
-                width={1280}
-                height={720}
+                className="h-4 w-4"
+                src={assets.star_icon}
+                alt="star"
+              />
+              <Image
+                className="h-4 w-4"
+                src={assets.star_icon}
+                alt="star"
+              />
+              <Image
+                className="h-4 w-4"
+                src={assets.star_icon}
+                alt="star"
+              />
+              <Image
+                className="h-4 w-4"
+                src={assets.star_icon}
+                alt="star"
+              />
+              <Image
+                className="h-4 w-4"
+                src={assets.star_dull_icon}
+                alt="star"
               />
             </div>
+
+            <p className="text-sm text-slate-500">(4.5 Reviews)</p>
           </div>
 
-          <div className="flex flex-col">
-            <h1 className="text-3xl font-medium text-gray-800/90 mb-4">
-              {product.name}
-            </h1>
-            <div className="flex items-center gap-2">
-              <div className="flex items-center gap-0.5">
-                <Image
-                  className="h-4 w-4"
-                  src={assets.star_icon}
-                  alt="star_icon"
-                />
-                <Image
-                  className="h-4 w-4"
-                  src={assets.star_icon}
-                  alt="star_icon"
-                />
-                <Image
-                  className="h-4 w-4"
-                  src={assets.star_icon}
-                  alt="star_icon"
-                />
-                <Image
-                  className="h-4 w-4"
-                  src={assets.star_icon}
-                  alt="star_icon"
-                />
-                <Image
-                  className="h-4 w-4"
-                  src={assets.star_dull_icon}
-                  alt="star_dull_icon"
-                />
-              </div>
-              <p>(4.5)</p>
-            </div>
-            <p className="text-gray-600 mt-3">{product.description}</p>
-            <p className="text-3xl font-medium mt-6">
+          {/* Description */}
+          <p className="mt-5 leading-7 text-slate-600">
+            {product.description}
+          </p>
+
+          {/* Price */}
+          <div className="mt-6 flex items-center gap-3">
+            <p className="text-4xl font-bold text-[#043033]">
               {process.env.NEXT_PUBLIC_CURRENCY}
-              {product?.price}
-              <span className="text-base font-normal text-gray-800/60 line-through ml-2">
-                {process.env.NEXT_PUBLIC_CURRENCY}
-                {product?.offer_price}
-              </span>
+              {product.price}
             </p>
-            <hr className="bg-gray-600 my-6" />
-            <div className="overflow-x-auto">
-              <table className="table-auto border-collapse w-full max-w-72">
-                <tbody>
-                  <tr>
-                    <td className="text-gray-600 font-medium">Brand</td>
-                    <td className="text-gray-800/50 ">{product.brand}</td>
-                  </tr>
-                  {product?.colors && (
-                    <tr>
-                      <td className="text-gray-600 font-medium">Colors</td>
-                      <td className="text-gray-800/50 ">
-                        {product.colors.map((each) => `${each} `)}
-                      </td>
-                    </tr>
-                  )}
-                  <tr>
-                    <td className="text-gray-600 font-medium">Category</td>
-                    <td className="text-gray-800/50">
-                      {product.category.name}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-              {product.product_comment && (
-                <div className="mt-4">
-                  <p className="text-black">{product.product_comment}</p>
-                </div>
+
+            {product.offer_price && (
+              <span className="text-lg text-slate-400 line-through">
+                {process.env.NEXT_PUBLIC_CURRENCY}
+                {product.offer_price}
+              </span>
+            )}
+          </div>
+
+          <hr className="my-8 border-slate-200" />
+
+          {/* Product Info */}
+          <table className="w-full text-sm">
+            <tbody>
+              <tr>
+                <td className="py-2 font-medium text-slate-700">Brand</td>
+                <td className="py-2 text-slate-500">{product.brand}</td>
+              </tr>
+
+              {product.colors && (
+                <tr>
+                  <td className="py-2 font-medium text-slate-700">Colors</td>
+                  <td className="py-2 text-slate-500">
+                    {product.colors.join(", ")}
+                  </td>
+                </tr>
               )}
 
-              <div className="mt-2">
-                {product.sizes?.map((each, index) => (
+              <tr>
+                <td className="py-2 font-medium text-slate-700">Category</td>
+                <td className="py-2 text-slate-500">
+                  {product.category.name}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          {/* Product Comment */}
+          {product.product_comment && (
+            <div className="mt-6 rounded-xl bg-slate-50 p-4">
+              <p className="text-slate-600">
+                {product.product_comment}
+              </p>
+            </div>
+          )}
+
+          {/* Sizes */}
+          {product.sizes && product.sizes.length > 0 && (
+            <div className="mt-6">
+              <h3 className="mb-3 font-medium text-slate-800">
+                Available Sizes
+              </h3>
+
+              <div className="flex flex-wrap gap-2">
+                {product.sizes.map((size, index) => (
                   <button
-                    className={` text-sm rounded-lg px-2 py-1 mr-1 `}
                     key={index}
+                    className="
+                      border
+                      border-slate-300
+                      px-4
+                      py-2
+                      rounded-lg
+                      text-sm
+                      hover:border-[#043033]
+                      hover:text-[#043033]
+                      transition
+                    "
                   >
-                    {each}
+                    {size}
                   </button>
                 ))}
               </div>
             </div>
+          )}
 
-            <div className="flex items-center mt-10 gap-4">
-              <button
-                onClick={handleAddToCart}
-                className="w-full py-3.5 border border-[#043033] text-gray-800/80 hover:bg-gray-200 transition"
-              >
-                Add to Cart
-              </button>
-              <Link
-                href={`/buy-now/${product.id}`}
-                className="w-full py-3.5 bg-[#043033] text-white hover:bg-black transition"
-              >
-                Buy now
-              </Link>
-            </div>
+          {/* Actions */}
+          <div className="mt-8 flex flex-col sm:flex-row gap-4">
+            <button
+              onClick={handleAddToCart}
+              className="
+                flex-1
+                rounded-xl
+                border
+                border-[#043033]
+                py-4
+                font-medium
+                text-[#043033]
+                hover:bg-[#043033]
+                hover:text-white
+                transition
+              "
+            >
+              Add to Cart
+            </button>
+
+            <Link
+              href={`/buy-now/${product.id}`}
+              className="
+                flex-1
+                rounded-xl
+                bg-[#043033]
+                py-4
+                text-center
+                font-medium
+                text-white
+                hover:bg-black
+                transition
+              "
+            >
+              Buy Now
+            </Link>
           </div>
         </div>
       </div>
-      {/* extra imges */}
-      {product.image_url_array.length > 1 &&
-        product.image_url_array.length > 0 && (
-          <div className="w-full flex justify-center mt-8 ">
-            <div className="flex flex-col md:flex-row md:flex-wrap gap-4 w-full max-w-[1000px]">
-              {product.image_url_array.map((eachImage, index) => (
-                <div
-                  key={index}
-                  className="w-full md:w-[calc(33.333%-1rem)] flex-shrink-0 bg-gray-100 rounded-lg overflow-hidden"
-                >
-                  <Image
-                    src={eachImage}
-                    alt={`Product extra image ${index}`}
-                    className="object-cover w-full h-auto"
-                    width={400}
-                    height={400}
-                  />
-                </div>
-              ))}
-            </div>
+
+      {/* Product Gallery */}
+      {product.image_url_array.length > 1 && (
+        <section className="mt-16">
+          <h2 className="mb-6 text-2xl font-semibold text-slate-900">
+            Product Gallery
+          </h2>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {product.image_url_array.map((image, index) => (
+              <div
+                key={index}
+                className="
+                  aspect-square
+                  overflow-hidden
+                  rounded-xl
+                  border
+                  border-slate-200
+                  bg-slate-100
+                "
+              >
+                <Image
+                  src={image}
+                  alt={`Product image ${index + 1}`}
+                  width={500}
+                  height={500}
+                  className="
+                    h-full
+                    w-full
+                    object-cover
+                    hover:scale-105
+                    transition
+                    duration-300
+                  "
+                />
+              </div>
+            ))}
           </div>
-        )}
-    </>
-  );
+        </section>
+      )}
+    </div>
+  </>
+);
+
 };
 
 export default ProductDetails;
