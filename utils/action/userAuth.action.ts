@@ -1,16 +1,15 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { cookies } from "next/headers";
 import { createClient } from "../supabase/server";
 import { emailValidationSchema } from "../zodvalidations/form-validations";
 
 export async function signUp(formData: FormData) {
-  const cookieStore = await cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = await createClient();
 
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
+  const full_name = formData.get("full_name") as string;
 
   const emailValidation = emailValidationSchema.safeParse({ email });
 
@@ -25,7 +24,7 @@ export async function signUp(formData: FormData) {
     password,
     options: {
       data: {
-        full_name: name,
+        full_name,
         avatar_url: null,
       },
     },
@@ -47,8 +46,7 @@ export async function signUp(formData: FormData) {
 }
 
 export async function login(formData: FormData) {
-  const cookieStore = await cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = await createClient();
 
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
@@ -83,8 +81,7 @@ export async function login(formData: FormData) {
 }
 
 export async function signOut() {
-  const cookieStore = await cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = await createClient();
 
   const { error } = await supabase.auth.signOut();
 

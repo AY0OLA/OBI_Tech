@@ -8,6 +8,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 
 const SignupUser = () => {
+  const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -43,6 +44,7 @@ const SignupUser = () => {
 
       const formData = new FormData();
 
+      formData.append("full_name", fullName);
       formData.append("email", email);
       formData.append("password", password);
 
@@ -103,6 +105,8 @@ const SignupUser = () => {
               Full Name
             </label>
             <input
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
               type="text"
               id="fullName"
               placeholder="Enter your full name"
