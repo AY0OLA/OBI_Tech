@@ -3,7 +3,7 @@
 import { assets } from "@/public/assests/assets";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import HamX from "./HamX";
 import { useAppContext } from "@/context/AppContext";
 import { signOut } from "@/utils/action/userAuth.action";
@@ -13,18 +13,19 @@ export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [userOpen, setUserOpen] = useState(false);
   const { session, setSession } = useAppContext();
-
+  
   const router = useRouter();
 
-    const checkIn = () => {
-      setUserOpen((prev) => !prev);
-    };
 
-    const handleSignOut = async () => {
-      await signOut();
-      setSession(null);
-      router.push("/");
-    };
+  const checkIn = () => {
+    setUserOpen((prev) => !prev);
+  };
+
+  const handleSignOut = async () => {
+    await signOut();
+    setSession(null);
+    router.push("/");
+  };
   return (
     <nav className="flex items-center justify-between px-6 md:px-16 lg:px-32 py-3 text-white bg-black ">
       <Link href="/">
@@ -47,7 +48,7 @@ export const Navbar = () => {
 
       <div>
         <ul className="hidden md:flex items-center gap-4 ">
-          <button>
+          <button >
             <Image className="w-4 h-4" src={assets.search_icon} alt="search" />
           </button>
 

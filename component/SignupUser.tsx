@@ -11,6 +11,7 @@ const SignupUser = () => {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -30,6 +31,12 @@ const SignupUser = () => {
       }
       if (password !== confirmPassword) {
         toast.error("Passwords do not match");
+        return;
+      }
+      if (!acceptedTerms) {
+        toast.error(
+          "You must agree to the Terms & Conditions and Privacy Policy",
+        );
         return;
       }
       const strongPassword =
@@ -59,9 +66,20 @@ const SignupUser = () => {
         return;
       }
 
-      toast.success("Account created successfully!", {
-        id: toastId,
-      });
+     if (result?.needsEmailConfirmation) {
+       toast.success(
+         "Verification email sent! Please check your inbox and confirm your account before signing in.",
+         {
+           id: toastId,
+           duration: 7000,
+         },
+       );
+     } else {
+       toast.success("Account created successfully!", {
+         id: toastId,
+         duration: 7000,
+       });
+     }
 
       router.push("/login");
     } catch (error) {
@@ -182,7 +200,13 @@ const SignupUser = () => {
 
           {/* Terms */}
           <div className="flex items-start gap-2">
-            <input type="checkbox" id="terms" className="mt-1" />
+            <input
+              type="checkbox"
+              id="terms"
+              checked={acceptedTerms}
+              onChange={(e) => setAcceptedTerms(e.target.checked)}
+              className="mt-1"
+            />
             <label htmlFor="terms" className="text-sm text-gray-600">
               I agree to the{" "}
               <Link
@@ -204,7 +228,7 @@ const SignupUser = () => {
           {/* Button */}
           <button
             onClick={handleSignup}
-            disabled={loading}
+            disabled={loading || !acceptedTerms}
             className="w-full py-3 bg-[#043033] hover:bg-[#021d1f] text-white font-semibold rounded-xl transition duration-300 disabled:opacity-50"
           >
             {loading ? "Creating Account..." : "Create Account"}

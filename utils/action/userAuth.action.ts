@@ -41,10 +41,9 @@ export async function signUp(formData: FormData) {
   return {
     error: null,
     user: data.user,
-    message: "Check your email to verify your account.",
+    needsEmailConfirmation: !data.session,
   };
 }
-
 export async function login(formData: FormData) {
   const supabase = await createClient();
 
