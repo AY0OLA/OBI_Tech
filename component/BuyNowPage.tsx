@@ -95,215 +95,285 @@ const BuyNowPage = ({
   }, [quantity, product.price, userAddresses, addresses]);
 
   return (
-    <div
-      className={`flex flex-col md:flex-row gap-10 px-6 md:px-16 lg:px-32 pt-14 mb-20
-        }`}
-    >
-      <div className="flex-1">
-        <div className="flex items-center justify-between mb-8 border-b border-gray-500/30 pb-6">
-          <p className="text-2xl md:text-3xl text-gray-500">
-            The Product To{" "}
-            <span className="font-medium text-[#043033]">Buy</span>
-          </p>
-        </div>
-        <div className="overflow-x-auto">
-          <table className="min-w-full table-auto">
-            <thead className="text-left">
-              <tr>
-                <th className="text-nowrap pb-6 md:px-4 px-1 text-gray-600 font-medium">
-                  Product Details
-                </th>
-                <th className="pb-6 md:px-4 px-1 text-gray-600 font-medium">
-                  Price
-                </th>
-                <th className="pb-6 md:px-4 px-1 text-gray-600 font-medium">
-                  Quantity
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {product && (
-                <tr>
-                  <td className="flex items-center gap-4 py-4 md:px-4 px-1">
-                    <div>
-                      <div className="rounded-lg overflow-hidden bg-gray-500/10 relative w-20 h-20">
-                        <Image
-                          src={product.image_url_array[0]}
-                          alt={product.name}
-                          className=" object-cover mix-blend-multiply "
-                          fill
-                        />
-                      </div>
-                    </div>
-                    <div className="text-sm ">
-                      <p className="text-gray-800">{product.name}</p>
-                      <p>{product.sizes && product.sizes}</p>
-                    </div>
-                  </td>
-                  <td className="py-4 md:px-4 px-1 text-gray-600">
-                    {process.env.NEXT_PUBLIC_CURRENCY}
-                    {product.price}
-                  </td>
-                  <td className="py-4 md:px-4 px-1">
-                    <div className="flex items-center md:gap-2 gap-1">
-                      <button onClick={decreaseQTY}>
-                        <Image
-                          src={assets.decrease_arrow}
-                          alt="decrease_arrow"
-                          className="w-4 h-4"
-                        />
+    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-8">
+        {/* Product Section */}
+        <div className="rounded-2xl border border-slate-200 bg-white shadow-sm">
+          <div className="border-b border-slate-200 px-6 py-5">
+            <h1 className="text-2xl md:text-3xl font-bold text-slate-900">
+              The Product To Buy
+            </h1>
+          </div>
+
+          {product && (
+            <div className="p-6">
+              <div className="flex flex-col sm:flex-row gap-5">
+                <div className="relative h-28 w-28 overflow-hidden rounded-xl border bg-slate-100">
+                  <Image
+                    src={product.image_url_array[0]}
+                    alt={product.name}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+
+                <div className="flex-1">
+                  <h2 className="text-lg font-semibold text-slate-900">
+                    {product.name}
+                  </h2>
+
+                  <p className="mt-1 text-slate-500">
+                    {product.sizes?.join(", ")}
+                  </p>
+
+                  <div className="mt-4 flex items-center justify-between flex-wrap gap-4">
+                    <p className="text-2xl font-bold text-[#043033]">
+                      {process.env.NEXT_PUBLIC_CURRENCY}
+                      {product.price}
+                    </p>
+
+                    {/* Quantity */}
+                    <div className="flex items-center border rounded-xl overflow-hidden">
+                      <button
+                        onClick={decreaseQTY}
+                        className="px-4 py-2 hover:bg-slate-100"
+                      >
+                        -
                       </button>
 
                       <input
-                        value={quantity}
                         readOnly
-                        type="text"
-                        className="w-8 border text-center appearance-none"
-                      ></input>
+                        value={quantity}
+                        className="w-12 text-center outline-none"
+                      />
 
-                      <button onClick={increaseQTY}>
-                        <Image
-                          src={assets.increase_arrow}
-                          alt="increase_arrow"
-                          className="w-4 h-4"
-                        />
+                      <button
+                        onClick={increaseQTY}
+                        className="px-4 py-2 hover:bg-slate-100"
+                      >
+                        +
                       </button>
                     </div>
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+                  </div>
 
-          <div className="mt-2">
-            {product?.sizes?.map((each, index) => (
+                  {/* Sizes */}
+                  {product.sizes?.length > 0 && (
+                    <div className="mt-5 flex flex-wrap gap-2">
+                      {product.sizes.map((size, index) => (
+                        <button
+                          key={index}
+                          className="
+                          rounded-lg
+                          border
+                          border-slate-300
+                          px-4
+                          py-2
+                          text-sm
+                          hover:border-[#043033]
+                          hover:text-[#043033]
+                          transition
+                        "
+                        >
+                          {size}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+
               <button
-                className={` text-sm rounded-lg px-2 py-1 mr-1 `}
-                key={index}
+                className="
+                mt-8
+                rounded-xl
+                bg-black
+                px-5
+                py-3
+                text-white
+                hover:bg-[#043033]
+                transition
+              "
               >
-                {each}
+                Continue Shopping
               </button>
-            ))}
-          </div>
+            </div>
+          )}
         </div>
-        <button className="group flex items-center mt-6 gap-2 text-[#fce3c7] bg-black rounded-2xl py-2 px-4 hover:bg-gray-800 transition">
-          <Image
-            className="group-hover:-translate-x-1 transition"
-            src={assets.arrow_right_icon_colored}
-            alt="arrow_right_icon_colored"
-          />
-          Continue Shopping
-        </button>
-      </div>
 
-      {/* <OrderSummary /> */}
-      <div className="w-full md:w-96 bg-gray-500/5 p-5">
-        <h2 className="text-xl md:text-2xl font-medium text-gray-700">
-          Order Summary
-        </h2>
-        <hr className="border-gray-500/30 my-5" />
-        <div className="space-y-6">
-          <div>
-            <label className="text-base font-medium uppercase text-gray-600 block mb-2">
-              Select Address
-            </label>
-            <div className="relative inline-block w-full text-sm border">
-              <button
-                onClick={() => setIsDropdownOpen((prev) => !prev)}
-                className="peer w-full text-left px-4 pr-2 py-2 bg-white text-gray-700 focus:outline-none"
-              >
-                <span>
+        {/* Order Summary */}
+        <div className="lg:sticky lg:top-24 h-fit">
+          <div className="rounded-2xl border border-slate-200 bg-white shadow-sm p-6">
+            <h2 className="text-2xl font-bold text-slate-900">Order Summary</h2>
+
+            {/* Address */}
+            <div className="mt-6">
+              <label className="block mb-2 text-sm font-semibold text-slate-700">
+                DELIVERY ADDRESS
+              </label>
+
+              <div className="relative">
+                <button
+                  onClick={() => setIsDropdownOpen((prev) => !prev)}
+                  className="
+                  w-full
+                  rounded-xl
+                  border
+                  border-slate-300
+                  bg-white
+                  px-4
+                  py-3
+                  text-left
+                  text-sm
+                "
+                >
                   {selectedAddress
                     ? `${selectedAddress.address}, ${selectedAddress.city}, ${selectedAddress.state}`
                     : "Select Address"}
-                </span>
-                <svg
-                  className={`w-5 h-5 inline float-right transition-transform duration-200 ${
-                    isDropdownOpen ? "rotate-0" : "-rotate-90"
-                  }`}
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="#6B7280"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M19 9l-7 7-7-7"
-                  />
-                </svg>
-              </button>
+                </button>
 
-              {isDropdownOpen && (
-                <ul className="absolute w-full bg-white border shadow-md mt-1 z-10 py-1.5">
-                  {userAddresses?.map((address, index) => (
-                    <li
-                      onClick={() => handleAddressSelect(address)}
-                      key={index}
-                      className="px-4 py-2 hover:bg-gray-500/10 cursor-pointer"
-                    >
-                      {address.address}, {address.city}, {address.state},
-                      {address.state}
-                    </li>
-                  ))}
-                  <Link
-                    href={`/address`}
-                    className="px-4 py-2 hover:bg-gray-500/10 cursor-pointer text-center"
+                {isDropdownOpen && (
+                  <div
+                    className="
+                    absolute
+                    z-20
+                    mt-2
+                    w-full
+                    rounded-xl
+                    border
+                    border-slate-200
+                    bg-white
+                    shadow-lg
+                    overflow-hidden
+                  "
                   >
-                    + Add New Address
-                  </Link>
-                </ul>
-              )}
+                    {userAddresses?.map((address, index) => (
+                      <button
+                        key={index}
+                        onClick={() => handleAddressSelect(address)}
+                        className="
+                        block
+                        w-full
+                        px-4
+                        py-3
+                        text-left
+                        hover:bg-slate-50
+                      "
+                      >
+                        {address.address}, {address.city}, {address.state}
+                      </button>
+                    ))}
 
-              <div>
-                <label className="text-base font-medium uppercase text-gray-600 block mb-2">
-                  Promo Code
-                </label>
-                <div className="flex flex-col items-start gap-3">
-                  <input
-                    type="text"
-                    placeholder="Enter promo code"
-                    className="flex-grow w-full outline-none p-2.5 text-gray-600 border"
-                  />
-                  <button className="bg-black text-white px-9 py-2 hover:bg-[#043033]">
-                    Apply
-                  </button>
-                </div>
-              </div>
-
-              <hr className="border-gray-500/30 my-5" />
-
-              <div className="space-y-4">
-                <div className="flex justify-between">
-                  <p className="text-gray-600">Shipping Fee</p>
-                  <p className="font-medium text-gray-800">
-                    {process.env.NEXT_PUBLIC_CURRENCY}
-                    {product.product_shipping_fee}
-                  </p>
-                </div>
-
-                <div className="flex justify-between text-lg md:text-xl font-medium border-t pt-3">
-                  <p>Total</p>
-                  <p>
-                    {process.env.NEXT_PUBLIC_CURRENCY}
-                    {totalCost}
-                  </p>
-                </div>
+                    <Link
+                      href="/address"
+                      className="
+                      block
+                      border-t
+                      px-4
+                      py-3
+                      text-center
+                      font-medium
+                      text-[#043033]
+                    "
+                    >
+                      + Add New Address
+                    </Link>
+                  </div>
+                )}
               </div>
             </div>
 
+            {/* Promo Code */}
+            <div className="mt-6">
+              <label className="block mb-2 text-sm font-semibold text-slate-700">
+                PROMO CODE
+              </label>
+
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  placeholder="Enter promo code"
+                  className="
+                  flex-1
+                  rounded-xl
+                  border
+                  border-slate-300
+                  px-4
+                  py-3
+                  outline-none
+                "
+                />
+
+                <button
+                  className="
+                  rounded-xl
+                  bg-black
+                  px-5
+                  text-white
+                  hover:bg-[#043033]
+                  transition
+                "
+                >
+                  Apply
+                </button>
+              </div>
+            </div>
+
+            <hr className="my-6" />
+
+            {/* Totals */}
+            <div className="space-y-4">
+              <div className="flex justify-between text-slate-600">
+                <span>Shipping Fee</span>
+
+                <span>
+                  {process.env.NEXT_PUBLIC_CURRENCY}
+                  {product.product_shipping_fee}
+                </span>
+              </div>
+
+              <div className="flex justify-between text-xl font-bold text-slate-900 border-t pt-4">
+                <span>Total</span>
+
+                <span>
+                  {process.env.NEXT_PUBLIC_CURRENCY}
+                  {totalCost}
+                </span>
+              </div>
+            </div>
+
+            {/* Payment */}
             {selectedAddress ? (
               <button
                 onClick={payNow}
-                className="bg-black text-white text-center p-3 align-center w-full mt-5 hover:bg-[#043033]"
+                className="
+                mt-6
+                w-full
+                rounded-xl
+                bg-[#043033]
+                py-4
+                font-semibold
+                text-white
+                hover:bg-black
+                transition
+              "
               >
                 Pay Now
               </button>
             ) : (
-              <p className="w-full  text-gray-600 py-3 mt-5">
-                **Please Select An Address To Continue
-              </p>
+              <div
+                className="
+                mt-6
+                rounded-xl
+                bg-amber-50
+                border
+                border-amber-200
+                p-4
+                text-sm
+                text-amber-700
+              "
+              >
+                Please select a delivery address to continue.
+              </div>
             )}
           </div>
         </div>

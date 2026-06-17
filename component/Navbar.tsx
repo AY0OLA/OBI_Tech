@@ -13,10 +13,23 @@ export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [userOpen, setUserOpen] = useState(false);
   const { session, setSession } = useAppContext();
-  
+
   const router = useRouter();
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setUserOpen(false);
+      setIsOpen(false);
+    };
 
+    document.addEventListener("mousedown", handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("resize", handleScroll);
+    return () => {
+      document.removeEventListener("mousedown", handleScroll);
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
   const checkIn = () => {
     setUserOpen((prev) => !prev);
   };
@@ -48,7 +61,7 @@ export const Navbar = () => {
 
       <div>
         <ul className="hidden md:flex items-center gap-4 ">
-          <button >
+          <button>
             <Image className="w-4 h-4" src={assets.search_icon} alt="search" />
           </button>
 
