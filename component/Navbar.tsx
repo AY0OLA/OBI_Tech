@@ -18,15 +18,13 @@ export const Navbar = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setUserOpen(false);
       setIsOpen(false);
+      setUserOpen(false);
     };
 
-    document.addEventListener("mousedown", handleScroll);
     window.addEventListener("scroll", handleScroll);
-    window.addEventListener("resize", handleScroll);
+
     return () => {
-      document.removeEventListener("mousedown", handleScroll);
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
