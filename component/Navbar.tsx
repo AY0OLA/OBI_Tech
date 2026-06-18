@@ -28,6 +28,17 @@ export const Navbar = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+  useEffect(() => {
+    if (isOpen) {
+      setUserOpen(false);
+    }
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (userOpen) {
+      setIsOpen(false);
+    }
+  }, [userOpen]);
   const checkIn = () => {
     setUserOpen((prev) => !prev);
   };
