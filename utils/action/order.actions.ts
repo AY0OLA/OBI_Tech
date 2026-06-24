@@ -2,8 +2,7 @@
 
 import { OrderParams } from "@/shared.types";
 import { createClient } from "../supabase/server";
-
-
+import { redirect } from "next/navigation";
 
 interface OrderItemsParams {
   amount: number;
@@ -36,7 +35,7 @@ export async function createOrder(orderItems: OrderItemsParams) {
   } = await supabase.auth.getUser();
 
   if (authError || !user) {
-    throw new Error("User not authenticated");
+   redirect("/login");
   }
 
   const { data: orderData, error } = await supabase
@@ -66,11 +65,10 @@ export async function createOrder(orderItems: OrderItemsParams) {
     throw new Error(error.message);
   }
 
-  console.log("Created order:", orderData);
+  // console.log("Created order:", orderData);
 
   return orderData.id;
 }
-
 
 export async function checkOrder(reference: string) {
   const supabase = await createClient();
@@ -78,7 +76,7 @@ export async function checkOrder(reference: string) {
   const { data } = await supabase.auth.getUser();
   const userId = data.user?.id;
   if (!userId) {
-    throw new Error("User not authenticated");
+    redirect("/login");
   }
 
   const { data: referenceFromPaystack, error } = await supabase
@@ -97,6 +95,8 @@ export async function checkOrder(reference: string) {
 }
 
 export async function fetchOrderById(orderId: string) {
+  // console.log("Fetching order:", orderId);
+
   const supabase = await createClient();
 
   const {
@@ -105,7 +105,8 @@ export async function fetchOrderById(orderId: string) {
   } = await supabase.auth.getUser();
 
   if (authError || !user) {
-    throw new Error("User not authenticated");
+    console.error("Auth error:", authError);
+    redirect("/login");
   }
 
   const { data, error } = await supabase
@@ -113,10 +114,15 @@ export async function fetchOrderById(orderId: string) {
     .select("*")
     .eq("id", orderId)
     .eq("user_id", user.id)
-    .maybeSingle(); 
+    .maybeSingle();
 
   if (error) {
-    console.error("Supabase fetch error:", error);
+    console.error("Supabase fetch error:", {
+      message: error.message,
+      details: error.details,
+      hint: error.hint,
+      code: error.code,
+    });
     return null;
   }
 
@@ -129,7 +135,7 @@ export async function fetchUserOrders(): Promise<OrderParams[]> {
   const { data } = await supabase.auth.getUser();
   const userId = data.user?.id;
   if (!userId) {
-    throw new Error("User not authenticated");
+    redirect("/login");
   }
 
   const { data: allUserOrders, error } = await supabase

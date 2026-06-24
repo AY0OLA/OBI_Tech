@@ -1,4 +1,4 @@
-import { ProductParams } from "@/shared.types";
+import {ProductParams} from "../../shared.types"
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 

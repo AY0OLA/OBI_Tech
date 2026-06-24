@@ -20,7 +20,7 @@ export async function fetchAddresses() {
   const userId = data.user?.id;
 
   if (!userId) {
-    console.log("User not authenticated-->>cartActions.ts");
+    // console.log("User not authenticated-->>cartActions.ts");
     redirect("/login");
     // throw new Error("User not authenticated-->>cartActions.ts");
   }
@@ -45,10 +45,10 @@ export async function saveAddressDB(formData: AddressDBParams) {
   const userId = data.user?.id;
 
   if (!userId) {
-    console.log("User not authenticated-->>cartActions.ts");
+    // console.log("User not authenticated-->>cartActions.ts");
     redirect("/login");
   }
-  console.log("address params--====>", formData);
+  // console.log("address params--====>", formData);
 
   const { data: address, error } = await supabase
     .from("address")
@@ -69,12 +69,12 @@ export async function saveAddressDB(formData: AddressDBParams) {
     .single();
 
   if (error) {
-    console.error("Error fetching addresses in address action :", error);
+    // console.error("Error fetching addresses in address action :", error);
     revalidatePath("/address");
     return { success: false };
   }
 
-  console.log("address sent to DB====-->", address);
+  // console.log("address sent to DB====-->", address);
   revalidatePath("/address");
   return { success: true };
 }
@@ -85,7 +85,7 @@ export async function makeDefaultAddress(addressId: string) {
   const userId = data.user?.id;
 
   if (!userId) {
-    console.log("User not authenticated-->>cartActions.ts");
+    // console.log("User not authenticated-->>cartActions.ts");
     redirect("/login");
     // throw new Error("User not authenticated-->>cartActions.ts");
   }

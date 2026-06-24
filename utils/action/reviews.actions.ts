@@ -17,7 +17,7 @@ export async function uploadImagesToSupabase(formData: FormData) {
   const userId = data.user?.id;
 
   if (!userId) {
-    console.log("No user found");
+    // console.log("No user found");
     redirect("/login");
   }
 
@@ -27,7 +27,7 @@ export async function uploadImagesToSupabase(formData: FormData) {
 
   try {
     const files = formData.getAll("reviewImages") as File[];
-    console.log(files);
+    // console.log(files);
     const uploadedImageUrls: string[] = [];
 
     for (const file of files) {
@@ -71,7 +71,6 @@ export async function createReview({
   const userId = data.user?.id;
 
   if (!userId) {
-    console.log("No user found");
     redirect("/login");
   }
 

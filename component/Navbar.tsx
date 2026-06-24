@@ -12,7 +12,9 @@ import { useRouter } from "next/navigation";
 export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [userOpen, setUserOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const { session, setSession } = useAppContext();
+  const [signInLoading, setSignInLoading] = useState(false);
 
   const router = useRouter();
 
@@ -43,11 +45,20 @@ export const Navbar = () => {
     setUserOpen((prev) => !prev);
   };
 
-  const handleSignOut = async () => {
+const handleSignOut = async () => {
+  try {
+    setLoading(true);
+
     await signOut();
     setSession(null);
+
     router.push("/");
-  };
+  } catch (error) {
+    console.error(error);
+  } finally {
+    setLoading(false);
+  }
+};
   return (
     <nav className="flex items-center justify-between px-6 md:px-16 lg:px-32 py-3 text-white bg-black ">
       <Link href="/">
@@ -152,9 +163,10 @@ export const Navbar = () => {
                 <div className="border-t border-gray-100 p-2">
                   <button
                     onClick={handleSignOut}
+                    disabled={loading}
                     className="w-full rounded-xl px-4 py-3 text-left text-sm font-medium text-red-600 hover:bg-red-50 transition"
                   >
-                    Sign Out
+                    {loading ? "Signing Out..." : "Sign Out"}
                   </button>
                 </div>
               </>
@@ -164,12 +176,16 @@ export const Navbar = () => {
                   Sign in to view your account and orders.
                 </p>
 
-                <Link
-                  href="/login"
-                  className="block w-full rounded-xl bg-[#043033] py-3 text-center text-sm font-medium text-white hover:bg-[#022224] transition"
+                <button
+                  onClick={() => {
+                    setSignInLoading(true);
+                    router.push("/login");
+                  }}
+                  disabled={signInLoading}
+                  className="block w-full rounded-xl bg-[#043033] py-3 text-center text-sm font-medium text-white hover:bg-[#022224] transition disabled:opacity-50"
                 >
-                  Sign In
-                </Link>
+                  {signInLoading ? "Loading..." : "Sign In"}
+                </button>
               </div>
             )}
           </div>

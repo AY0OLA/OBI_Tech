@@ -21,7 +21,7 @@ export default async function VerifyPaymentPage({
   });
 
   const result = await response.json();
-  console.log("Payment Verification Result:", result);
+  // console.log("Payment Verification Result:", result);
 
   return (
     <VerifyPay
