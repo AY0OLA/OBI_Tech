@@ -8,6 +8,7 @@ export default async function VerifyPaymentPage({
   searchParams: Promise<{ [key: string]: string }>;
 }) {
   const { reference } = await searchParams;
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
   const orderExist = await checkOrder(reference);
 
@@ -15,9 +16,9 @@ export default async function VerifyPaymentPage({
     redirect("/");
   }
 
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_SITE_URL}/api/verifyPayment/${reference}`,
-  );
+  const response = await fetch(`${baseUrl}/api/verifyPayment/${reference}`, {
+    cache: "no-store",
+  });
 
   const result = await response.json();
   console.log("Payment Verification Result:", result);

@@ -2,7 +2,7 @@
 
 import { createOrder } from "@/utils/action/order.actions";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import toast from "react-hot-toast";
 
 export const VerifyPay = ({
@@ -15,42 +15,62 @@ export const VerifyPay = ({
   email: string;
 }) => {
   const router = useRouter();
+  const hasRun = useRef(false);
+
   useEffect(() => {
+    if (hasRun.current) return;
+    hasRun.current = true;
     const paymentInfo = JSON.parse(
       localStorage.getItem("paymentInformation") || "{}",
     );
-    if (
-      paymentInfo.amount !== amount / 100 ||
-      paymentInfo.userEmail !== email
-    ) {
+
+    console.log("Stored payment info:", paymentInfo);
+
+    console.log("Stored amount:", paymentInfo.amount);
+    console.log("Paystack amount:", amount);
+    console.log("Paystack amount / 100:", amount / 100);
+
+    console.log("Stored email:", paymentInfo.userEmail);
+    console.log("Paystack email:", email);
+
+    const isValidPayment =
+      paymentInfo.amount === amount / 100 && paymentInfo.userEmail === email;
+
+    if (!isValidPayment) {
       toast.error("Payment Verification Error");
       return;
-    } else {
-      toast.success("Payment Verified Successfully");
+    }
 
-      const makeOrder = async () => {
-        const localStorageItems = JSON.parse(
-          localStorage.getItem("paymentInformation") || "{}",
-        );
-        const orderItems = {
-          user_id: localStorageItems.userId,
-          amount: localStorageItems.amount,
-          user_email: localStorageItems.userEmail,
-          productName: localStorageItems.productName,
-          quantity: localStorageItems.quantity,
-          productCategory: localStorageItems.productCategory,
-          productImage: localStorageItems.image,
-          address: localStorageItems.fullAddressFields,
-          paymentReference: reference,
-        };
+    const makeOrder = async () => {
+      const localStorageItems = JSON.parse(
+        localStorage.getItem("paymentInformation") || "{}",
+      );
 
-        const orderId = await createOrder(orderItems);
-        router.replace(`/order/${orderId}`);
+      const orderItems = {
+        amount: localStorageItems.amount,
+        user_email: localStorageItems.userEmail,
+        productName: localStorageItems.productName,
+        quantity: localStorageItems.quantity,
+        productCategory: localStorageItems.productCategory,
+        productImage: localStorageItems.image,
+        address: localStorageItems.fullAddressFields,
+        paymentReference: reference,
       };
 
-      makeOrder();
-    }
-  });
+      try {
+        const orderId = await createOrder(orderItems);
+
+        localStorage.removeItem("paymentInformation");
+
+        router.replace(`/order/${orderId}`);
+      } catch (error) {
+        console.error(error);
+        toast.error("Failed to create order");
+      }
+    };
+
+    makeOrder();
+  }, [amount, email, reference, router]);
   return (
     <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4">
       <div className="w-full max-w-lg">
@@ -98,7 +118,10 @@ export const VerifyPay = ({
               <span className="text-slate-500">Amount</span>
               <span className="font-semibold text-[#043033]">
                 {process.env.NEXT_PUBLIC_CURRENCY}
-                {amount}
+                {(amount / 100).toLocaleString(undefined, {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
               </span>
             </div>
 

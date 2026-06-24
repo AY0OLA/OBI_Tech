@@ -3,6 +3,8 @@
 import { OrderParams } from "@/shared.types";
 import { createClient } from "../supabase/server";
 
+
+
 interface OrderItemsParams {
   amount: number;
   user_email: string;
@@ -28,41 +30,47 @@ interface OrderItemsParams {
 export async function createOrder(orderItems: OrderItemsParams) {
   const supabase = await createClient();
 
-  const { data } = await supabase.auth.getUser();
-  const userId = data.user?.id;
-  if (!userId) {
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser();
+
+  if (authError || !user) {
     throw new Error("User not authenticated");
   }
 
   const { data: orderData, error } = await supabase
     .from("orders")
-    .insert([
-      {
-        user_id: userId,
-        user_email: orderItems.user_email,
-        amount_paid: orderItems.amount,
-        product_name: orderItems.productName,
-        product_category: orderItems.productCategory,
-        quantity_bought: orderItems.quantity,
-        image_url: orderItems.productImage,
-        status: "processing",
-        region: orderItems.address.region,
-        state: orderItems.address.state,
-        city: orderItems.address.city,
-        address: orderItems.address.address,
-        phone: orderItems.address.phone,
-        country_code: orderItems.address.country_code,
-        reference_paystack: orderItems.paymentReference,
-      },
-    ])
-    .eq("user_id", userId)
-    .select();
+    .insert({
+      user_id: user.id,
+      user_email: orderItems.user_email,
+      amount_paid: orderItems.amount,
+      product_name: orderItems.productName,
+      product_category: orderItems.productCategory,
+      quantity_bought: orderItems.quantity,
+      image_url: orderItems.productImage,
+      status: "processing",
+      region: orderItems.address.region,
+      state: orderItems.address.state,
+      city: orderItems.address.city,
+      address: orderItems.address.address,
+      phone: orderItems.address.phone,
+      country_code: orderItems.address.country_code,
+      reference_paystack: orderItems.paymentReference,
+    })
+    .select()
+    .single();
 
   if (error) {
     console.error("Error creating order:", error);
+    throw new Error(error.message);
   }
-  return orderData && orderData[0].id;
+
+  console.log("Created order:", orderData);
+
+  return orderData.id;
 }
+
 
 export async function checkOrder(reference: string) {
   const supabase = await createClient();
@@ -91,25 +99,28 @@ export async function checkOrder(reference: string) {
 export async function fetchOrderById(orderId: string) {
   const supabase = await createClient();
 
-  const { data } = await supabase.auth.getUser();
-  const userId = data.user?.id;
-  if (!userId) {
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser();
+
+  if (authError || !user) {
     throw new Error("User not authenticated");
   }
 
-  const { data: orderData, error } = await supabase
+  const { data, error } = await supabase
     .from("orders")
     .select("*")
     .eq("id", orderId)
-    .eq("user_id", userId)
-    .single();
+    .eq("user_id", user.id)
+    .maybeSingle(); 
 
   if (error) {
-    console.error("Error fetching order:", error);
+    console.error("Supabase fetch error:", error);
     return null;
   }
 
-  return orderData;
+  return data;
 }
 
 export async function fetchUserOrders(): Promise<OrderParams[]> {
