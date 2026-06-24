@@ -224,7 +224,6 @@ const CartPage = ({ addresses }: { addresses: AddressParams[] }) => {
                       <td className="px-6 py-5 text-slate-700 font-medium">
                         {process.env.NEXT_PUBLIC_CURRENCY}{" "}
                         {formatPrice(eachItem.price)}
-                        {console.log(eachItem)}
                       </td>
 
                       <td className="px-6 py-5">
