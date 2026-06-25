@@ -4,7 +4,7 @@ import HomeProducts from "@/component/HomeProducts";
 import { Navbar } from "@/component/Navbar";
 import { fetchProducts } from "@/utils/action/product.action";
 import React from "react";
-
+export const dynamic = "force-dynamic";
 export default async function Page() {
   const allProducts = await fetchProducts();
   
