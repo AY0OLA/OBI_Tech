@@ -1,4 +1,4 @@
-import { ProductParams } from "@/shared.types";
+import { ProductParams } from "../../shared.types";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
@@ -7,12 +7,15 @@ interface CartStoreParams {
   addItem: (item: ProductParams) => void;
   decreaseQty: (id: string) => void;
   increaseQty: (id: string) => void;
+  removeItem: (id: string) => void;
   clearCartItems: () => void;
 }
+
 export const cartStore = create<CartStoreParams>()(
   persist(
     (set) => ({
       items: [],
+
       addItem: (item) =>
         set((state) => {
           const existingCartItems = state.items.find((i) => i.id === item.id);
@@ -31,6 +34,7 @@ export const cartStore = create<CartStoreParams>()(
             items: [...state.items, { ...item, quantity: 1 }],
           };
         }),
+
       decreaseQty: (id: string) =>
         set((state) => ({
           items: state.items
@@ -39,15 +43,23 @@ export const cartStore = create<CartStoreParams>()(
             )
             .filter((item) => item.quantity > 0),
         })),
+
       increaseQty: (id: string) =>
         set((state) => ({
           items: state.items.map((item) =>
             item.id === id ? { ...item, quantity: item.quantity + 1 } : item,
           ),
         })),
+
+      removeItem: (id: string) =>
+        set((state) => ({
+          items: state.items.filter((item) => item.id !== id),
+        })),
+
       clearCartItems: () => set({ items: [] }),
     }),
-
-    { name: "cart-storage" },
+    {
+      name: "cart-storage",
+    },
   ),
 );

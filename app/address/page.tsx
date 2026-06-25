@@ -22,7 +22,7 @@ export default async function Address() {
     .eq("user_id", user.id)
     .order("created_at", { ascending: false });
 
-  console.log("address data--->>", data);
+  // console.log("address data--->>", data);
 
   return (
     <>

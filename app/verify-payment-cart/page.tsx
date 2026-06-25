@@ -1,8 +1,8 @@
-import { VerifyPay } from "@/component/VerifyPay";
+import { VerifyPayCart } from "@/component/VerifyPayCart";
 import { checkOrder } from "@/utils/action/order.actions";
 import { redirect } from "next/navigation";
 
-export default async function VerifyPaymentPage({
+export default async function VerifyPaymentPageCart({
   searchParams,
 }: {
   searchParams: Promise<{ [key: string]: string }>;
@@ -24,7 +24,7 @@ export default async function VerifyPaymentPage({
   // console.log("Payment Verification Result:", result);
 
   return (
-    <VerifyPay
+    <VerifyPayCart
       reference={reference}
       amount={result.data.amount}
       email={result.data.customer.email}

@@ -24,15 +24,6 @@ export const VerifyPay = ({
       localStorage.getItem("paymentInformation") || "{}",
     );
 
-    console.log("Stored payment info:", paymentInfo);
-
-    console.log("Stored amount:", paymentInfo.amount);
-    console.log("Paystack amount:", amount);
-    console.log("Paystack amount / 100:", amount / 100);
-
-    console.log("Stored email:", paymentInfo.userEmail);
-    console.log("Paystack email:", email);
-
     const isValidPayment =
       paymentInfo.amount === amount / 100 && paymentInfo.userEmail === email;
 

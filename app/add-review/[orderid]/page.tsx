@@ -4,11 +4,11 @@ import { fetchOrderById } from "@/utils/action/order.actions";
 export default async function AddReview({
   params,
 }: {
-  params: Promise<{ orderId: string }>;
+  params: Promise<{ orderid: string }>;
 }) {
-  const { orderId } = await params;
+  const { orderid } = await params;
   
-  const orderData = await fetchOrderById(orderId);
+  const orderData = await fetchOrderById(orderid);
 
   return (
     <>

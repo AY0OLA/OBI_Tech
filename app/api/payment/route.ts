@@ -12,7 +12,7 @@ interface PaystackResponse {
 
 export async function POST(request: Request) {
   try {
-    console.log("Payment API Request Received");
+    // console.log("Payment API Request Received");
 
     const { email, amount, source } = await request.json();
 
@@ -23,11 +23,11 @@ export async function POST(request: Request) {
       );
     }
 
-    // const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
-    const baseUrl =
-      process.env.NODE_ENV === "development"
-        ? "http://localhost:3000"
-        : process.env.NEXT_PUBLIC_SITE_URL!;
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+    // const baseUrl =
+    //   process.env.NODE_ENV === "development"
+    //     ? "http://localhost:3000"
+    //     : process.env.NEXT_PUBLIC_SITE_URL!;
     const callbackUrl =
       source === "buy-now"
         ? `${baseUrl}/verify-payment`
@@ -51,7 +51,7 @@ export async function POST(request: Request) {
         }),
       },
     );
-    console.log("Callback URL:", callbackUrl);
+    // console.log("Callback URL:", callbackUrl);
     if (!response.ok) {
       const errorBody = await response.text();
 
@@ -69,7 +69,7 @@ export async function POST(request: Request) {
 
     const result: PaystackResponse = await response.json();
 
-    console.log("Paystack Initialization Result:", result);
+    // console.log("Paystack Initialization Result:", result);
 
     return NextResponse.json(result);
   } catch (error) {

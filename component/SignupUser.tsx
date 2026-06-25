@@ -17,7 +17,7 @@ const SignupUser = () => {
   const router = useRouter();
 
   const handleSignup = async () => {
-    console.log("Signup button clicked");
+    // console.log("Signup button clicked");
     try {
       setLoading(true);
 

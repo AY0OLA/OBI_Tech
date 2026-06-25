@@ -92,7 +92,7 @@ export async function GET(
 ) {
   const { reference } = await params;
   try {
-    console.log("Payment API Request Received");
+    // console.log("Payment API Request Received");
 
     const response = await fetch(
       `https://api.paystack.co/transaction/verify/${reference}`,
@@ -106,21 +106,21 @@ export async function GET(
     );
 
     if (!response.ok) {
-      console.log(
-        "Failed verifying transaction from Paystack:",
-        response.statusText,
-      );
-      console.log("Failed response from Paystack:", response);
+      // console.log(
+      //   "Failed verifying transaction from Paystack:",
+      //   response.statusText,
+      // );
+      // console.log("Failed response from Paystack:", response);
       return NextResponse.json(
         { error: "Failed to verify Paystack transaction" },
         { status: response.status },
       );
     }
     const result: VerificationResponse = await response.json();
-    console.log("Paystack Verification Result:", result);
+    // console.log("Paystack Verification Result:", result);
     return NextResponse.json(result);
   } catch (error) {
-    console.log("Payment API Error:", error);
+    // console.log("Payment API Error:", error);
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 },

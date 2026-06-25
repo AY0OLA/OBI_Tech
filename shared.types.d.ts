@@ -47,8 +47,7 @@ export type OrderStatus =
   | "shipped"
   | "delivered"
   | "returned"
-  | "waiting"
-  | "reviewed";
+  | "waiting";
 
 export interface OrderParams {
   id: string; // UUID
@@ -60,6 +59,7 @@ export interface OrderParams {
   quantity_bought: number;
   image_url: string;
   status: OrderStatus;
+  reviewed: boolean;
   size?: string | null;
   color?: string | null;
   region?: string | null;

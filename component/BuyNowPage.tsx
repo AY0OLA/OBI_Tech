@@ -74,7 +74,7 @@ const BuyNowPage = ({
         router.push(paystackResult.data.authorization_url);
       }
     } catch (error) {
-      console.log("Payment Error:", error);
+      // console.log("Payment Error:", error);
       toast.error("Payment failed. Please try again.");
     } finally {
       console.log("Payment Processed");
