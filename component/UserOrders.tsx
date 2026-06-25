@@ -211,8 +211,7 @@ const UserOrders = ({ userOrders }: { userOrders: OrderParams[] }) => {
                         </button>
                       )}
 
-                      {order.status === "completed" &&
-                        order.status !== "reviewed" && (
+                      {order.status === "completed" && (
                           <Link
                             href={`/add-review/${order.id}`}
                             className="
