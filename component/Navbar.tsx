@@ -151,12 +151,12 @@ const handleSignOut = async () => {
                     My Orders
                   </Link>
 
-                  <Link
+                  {/* <Link
                     href="/reviews"
                     className="flex items-center rounded-xl px-4 py-3 text-sm text-gray-700 hover:bg-gray-100 transition"
                   >
                     My Reviews
-                  </Link>
+                  </Link> */}
                 </div>
 
                 {/* Sign Out */}
